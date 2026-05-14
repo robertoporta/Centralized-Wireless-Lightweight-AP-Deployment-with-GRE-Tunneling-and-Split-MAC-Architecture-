@@ -246,55 +246,55 @@ FlexConnect Local Switching is the engine of our optimization; it tells the Acce
 <br>
 
 <p>
-- 
+- To ensure a professional and localized user experience, I implemented AP Groups to enforce geographic SSID isolation. In a centralized WLC deployment, all configured WLANs are broadcast by all joined Access Points by default. To prevent the Sterling-HQ SSID from appearing in the Fairfax office (and vice versa), I created the STERLING-GROUP and FAIRFAX-GROUP. I then modified the WLAN advertisement mapping for each group so that only the site-specific SSID was active. By moving AP1 into the Sterling group and AP2 into the Fairfax group, I ensured that users only see the wireless networks relevant to their physical building, effectively preventing cross-site SSID "bleed" and ensuring logical client association. 
 </p>
 
 <p>
-
+<img width="779" height="277" alt="image" src="https://github.com/user-attachments/assets/323c2635-cf62-483a-9b02-df15dae96ae2" />
 </p>
-<br>
-
 <p>
-- 
+<img width="779" height="294" alt="image" src="https://github.com/user-attachments/assets/1420bd3d-27aa-4a29-a2b4-f1cd11cf0304" />
 </p>
-
 <p>
-
+<img width="779" height="276" alt="image" src="https://github.com/user-attachments/assets/8c5af97c-2141-4d58-9b83-b551320351c1" />
 </p>
-<br>
-
 <p>
-- 
+<img width="779" height="297" alt="image" src="https://github.com/user-attachments/assets/21341a5d-61cf-4fdb-91d1-8cc8ac0bc763" />
 </p>
-
 <p>
-
+<img width="780" height="280" alt="image" src="https://github.com/user-attachments/assets/9a5e434c-1aad-4ae1-aafd-efd165ef23bc" />
+</p>
+<p>
+<img width="779" height="233" alt="image" src="https://github.com/user-attachments/assets/b097238e-b3a7-4870-9c72-bac43e32e875" />
 </p>
 <br>
 
 <p>
-- 
+- Now that the WLC configuration of the Lightweight APs is complete, I can connect the wireless clients to their respective APs.  Laptop 1 / 2 and Smartphone 1 connect to AP1 in Sterling, while Laptop 3 / 4 and Smartphone 2 connect to AP2 in Fairfax. To test connectivity, in L1 I go to the wireless settings, type in the Sterling-HQ, select WPA2-PSK and type in the “Sterling123!” password, making it connect to AP1. Underneath, in the IP configuration, I select DHCP and the device is able to get an IP address from the Sterling_Wireless pool, confirming that clients in Sterling-HQ are able to connect to the AP and successfully request a DHCP address. In addition to an IP address, DHCP also gives the devices the correct default gateway and DNS server.
+  
+In Fairfax I do the same for L3, but instead I type in the SSID Fairfax-Office and password “Fairfax123!”, connecting it to AP2. Additionally, I select DHCP in the IP Configuration, and DHCP leases it a correct IP from the pool Fairfax_Pool. I do the same configurations across all devices in each site to connect all devices and give them DHCP addresses. The 3rd image shows what the updated topology looks like with devices connected, we can see the wireless connection from the clients to the APs.
 </p>
 
 <p>
-
+<img width="778" height="378" alt="image" src="https://github.com/user-attachments/assets/771716d4-4e30-4faa-a35a-8a7ae064ab1d" />
+</p>
+<p>
+<img width="782" height="383" alt="image" src="https://github.com/user-attachments/assets/3526dc2c-d8de-4016-bbd5-9996ce9ef30e" />
+</p>
+<p>
+<img width="779" height="337" alt="image" src="https://github.com/user-attachments/assets/8b4176a7-245b-4560-8573-6f579f9200b2" />
 </p>
 <br>
 
 <p>
-- 
+- As the final step, I run some ping tests across the networks. The first test I ping from L2 in Sterling to SP2 in Fairfax. The ping is successful, and with the tracert command I can see the different hops that were taken. What stands out the most here, is that the IPs that the routers are using to communicate across the internet, is the GRE tunnel IP, this means that the GRE tunnel is successfully encapsulating the traffic, making the entire public internet infrastructure invisible to the internal network.
+This shows that our private routing logic remains secure, as the edge routers treat the tunnel as a direct, point-to-point link. Effectively, the Sterling and Fairfax sites are communicating as if they were on the same local backbone, completely bypassing the complexity of the public WAN. Although these packets are utilizing the same physical ports and cabling as the standard internet-bound traffic, they are doing so via virtual interfaces. This allows the private data to traverse the exact same physical hops as public traffic while remaining logically isolated and hidden within the GRE protocol. Lastly, for good measure I tested another ping, this time from L4 in the Fairfax office to SP1 in the Sterling HQ. It is also successful and the tracert shows the GRE tunnel IP as well.
 </p>
 
 <p>
-
+<img width="776" height="523" alt="image" src="https://github.com/user-attachments/assets/bc562dbe-3d99-4d6c-a2c9-9e919764d252" />
 </p>
-<br>
-
 <p>
-- 
-</p>
-
-<p>
-
+<img width="776" height="529" alt="image" src="https://github.com/user-attachments/assets/32da9423-15e8-4ea0-9bc9-6ce5a3d553b8" />
 </p>
 <br>
