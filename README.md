@@ -297,4 +297,3 @@ This shows that our private routing logic remains secure, as the edge routers tr
 <p>
 <img width="776" height="529" alt="image" src="https://github.com/user-attachments/assets/32da9423-15e8-4ea0-9bc9-6ce5a3d553b8" />
 </p>
-<br>
