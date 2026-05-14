@@ -182,6 +182,115 @@ I also confirmed that the controller is active and connected to the Sterling fab
 <br>
 
 <p>
+- Next, I navigated to the Security Tab for the Sterling-HQ WLAN to implement WPA2-PSK with AES Encryption, entering the password “Sterling123!”. To finalize the configuration, I moved to the Advanced Tab and enabled FlexConnect Local Switching and FlexConnect Local Auth.
+FlexConnect Local Switching is the engine of our optimization; it tells the Access Point to switch user data frames locally onto the Sterling network fabric instead of sending them through a CAPWAP tunnel to the WLC. FlexConnect Local Auth complements this by allowing the AP to authenticate the client locally. This is vital for maintaining branch site resiliency; it ensures that even if the WAN link or the GRE tunnel to the central WLC is disrupted, the AP has the autonomy to validate user credentials and maintain network access without waiting for a response from HQ.
+</p>
+
+<p>
+<img width="773" height="432" alt="image" src="https://github.com/user-attachments/assets/066d6b3b-3351-455e-90f8-b597d4f3b447" />
+</p>
+<p>
+<img width="779" height="288" alt="image" src="https://github.com/user-attachments/assets/9cd4395e-4f96-41dd-9fa0-e5d185951677" />
+</p>
+<p>
+<img width="778" height="399" alt="image" src="https://github.com/user-attachments/assets/e40ddb88-d011-4ac7-9e06-6b8a6fba5f81" />
+</p>
+<br>
+
+<p>
+- Before provisioning the Fairfax WLAN, I created a virtual interface on the WLC to act as the "exit point" for Fairfax wireless traffic. This interface allows the WLC to bridge client data to the Fairfax branch subnet logic. I selected port 1, assigned the interface an IP within the Fairfax range (10.0.2.11), and set the gateway to 10.0.3.1. This gateway reflects the sub-interface at R1 that handles routed traffic for the remote office, ensuring the WLC knows to send traffic through the central hub's routing engine to reach the Fairfax branch via the GRE tunnel. Additionally, I set the Primary DHCP server to 10.0.2.1, which is the local R2 sub-interface; this ensures that even though management is centralized, Fairfax clients obtain their IP addresses directly from their local branch gateway to minimize WAN traffic, which is possible with the help of FlexConnect.
+</p>
+
+<p>
+<img width="783" height="148" alt="image" src="https://github.com/user-attachments/assets/21d5ed32-f197-42f5-ad65-ca103f4329cd" />
+</p>
+<p>
+<img width="740" height="606" alt="image" src="https://github.com/user-attachments/assets/eff6be10-4ecf-4e0a-99a0-5ba06004f280" />
+</p>
+<br>
+
+<p>
+- I repeated the provisioning process for the Fairfax branch by creating a new WLAN. On the General tab, I set both the Profile Name and SSID to "Fairfax-Office" and enabled the profile. I selected the "Fairfax-Interface" for this WLAN. By associating the WLAN with its own dedicated controller interface, we define a clear logical boundary for Fairfax traffic; this allows the WLC to process the data according to the remote site’s specific subnet rules and ensure that the FlexConnect AP knows exactly which local subnet to bridge the traffic into.
+</p>
+
+<p>
+<img width="783" height="187" alt="image" src="https://github.com/user-attachments/assets/e8f62194-f99e-413f-99c3-e64c8f9efe06" />
+</p>
+<p>
+<img width="780" height="445" alt="image" src="https://github.com/user-attachments/assets/1d9e1d9f-e7a6-445e-9132-efe0e7e9abbf" />
+</p>
+<br>
+
+<p>
+- I moved to the Security Tab for the Fairfax-Office WLAN and replicated our enterprise-grade security, using WPA2-PSK with a unique password of “Fairfax123!”. Finally, I accessed the Advanced Tab and checked the boxes for FlexConnect Local Switching and FlexConnect Local Auth. These settings are critical for the branch office, as they prevent local Fairfax data from having to travel across the GRE tunnel to be switched or authenticated by the Sterling WLC. By switching data locally and authenticating at the edge, we reduce WAN overhead and eliminate the WLC as a single point of failure for remote site connectivity.
+</p>
+
+<p>
+<img width="783" height="433" alt="image" src="https://github.com/user-attachments/assets/4fc4902a-974e-41ea-a553-b9ebc45c2d1c" />
+</p>
+<p>
+<img width="781" height="286" alt="image" src="https://github.com/user-attachments/assets/2b52ebc8-dddc-4d83-bb78-4bd7fdc32212" />
+</p>
+<p>
+<img width="780" height="393" alt="image" src="https://github.com/user-attachments/assets/614c2cbc-cb94-40b3-bf55-828582ae1999" />
+</p>
+<br>
+
+<p>
+- In the Wireless dashboard, I confirmed that AP1 (10.0.1.12) and AP2 (10.0.2.11) are fully joined and operational. Interestingly, the WLC displays a third entry (00E0.A3CD.6601) with an IP of 0.0.0.0. In a production environment, this demonstrates the WLC’s Persistence Monitoring and Rogue AP Detection capabilities. Even after a device is disconnected, the WLC retains the MAC address record in its "All APs" database to alert administrators of previously seen hardware or potential unauthorized access attempts. This ensures that any rogue devices are logged for security auditing, even if they currently lack a valid IP address.
+</p>
+
+<p>
+<img width="767" height="274" alt="image" src="https://github.com/user-attachments/assets/5d735267-c27e-4cf7-80c2-ad56e14788f2" />
+</p>
+<br>
+
+<p>
+- 
+</p>
+
+<p>
+
+</p>
+<br>
+
+<p>
+- 
+</p>
+
+<p>
+
+</p>
+<br>
+
+<p>
+- 
+</p>
+
+<p>
+
+</p>
+<br>
+
+<p>
+- 
+</p>
+
+<p>
+
+</p>
+<br>
+
+<p>
+- 
+</p>
+
+<p>
+
+</p>
+<br>
+
+<p>
 - 
 </p>
 
