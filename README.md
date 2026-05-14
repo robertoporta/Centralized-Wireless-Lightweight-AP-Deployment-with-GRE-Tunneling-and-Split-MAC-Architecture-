@@ -158,20 +158,26 @@ I also confirmed that the controller is active and connected to the Sterling fab
 <br>
 
 <p>
-- 
+- To bridge wireless users to the wired network, I created a Dynamic Interface named "Sterling-Interface." I assigned it VLAN Identifier 10 to match the router's sub-interface. I configured the interface with an IP of 10.0.1.11 and pointed the gateway and Primary DHCP Server to 10.0.1.1. This ensures that the WLC is logically present within the user subnet to manage traffic flow and proxy DHCP requests to the R1 router gateway. This configuration, combined with the trunking on SW1 g0/2, allows the WLC to successfully bridge the physical and virtual, effectively eliminating APIPA issues for Sterling users by providing a clear path to the local DHCP server.
 </p>
 
 <p>
-
+<img width="777" height="147" alt="image" src="https://github.com/user-attachments/assets/74015747-dc1e-4625-8fbc-2c84e036131b" />
+</p>
+<p>
+<img width="752" height="617" alt="image" src="https://github.com/user-attachments/assets/d31cbbc0-7e59-4650-afe2-3657d9deff96" />
 </p>
 <br>
 
 <p>
-- 
+- I then created the specific WLAN profile for the Sterling location. On the General Tab, I defined the Profile Name and SSID as “Sterling-HQ”. After I applied the initial settings, I ensure that I check the “Enabled” status box to bring it online and selected the Sterling-Interface created in the previous step as the interface gateway. Using the Sterling-Interface binds this WLAN specifically to VLAN 10, ensuring that users land in the correct broadcast domain and use the local Sterling gateway rather than saturating the management channel.
 </p>
 
 <p>
-
+<img width="780" height="138" alt="image" src="https://github.com/user-attachments/assets/9cbbfe8a-2763-4556-981c-3476af453fe4" />
+</p>
+<p>
+<img width="782" height="374" alt="image" src="https://github.com/user-attachments/assets/ac68564f-f62c-4472-af92-286c491893b0" />
 </p>
 <br>
 
