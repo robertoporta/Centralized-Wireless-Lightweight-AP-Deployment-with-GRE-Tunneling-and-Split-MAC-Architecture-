@@ -102,47 +102,58 @@ The image below shows the topology illustrating the interconnection of the two l
 <br>
 
 <p>
-- 
+- Address automation at the Fairfax branch is handled with a local DHCP pool on R2. I implemented DHCP Option 43 using the direct IP of the Sterling WLC (172.16.1.10) to allow remote registration across the GRE tunnel. Because the Fairfax WLAN is configured for FlexConnect Local Switching, R2 handles DHCP requests locally for wireless clients. As with the Sterling configuration, a DNS server was included at 20.20.20.20 for architectural completeness.
 </p>
 
 <p>
-
-</p>
-<br>
-
-<p>
-- 
-</p>
-
-<p>
-
+<img width="750" height="163" alt="image" src="https://github.com/user-attachments/assets/97180ca5-3746-41e1-92e6-0673ae73987f" />
 </p>
 <br>
 
 <p>
-- 
+- To complete the Fairfax infrastructure, I configured SW2. I initialized the VLAN database by creating and naming VLAN 30 for Fairfax Wireless. Unlike SW1, SW2 only requires a single VLAN because the Fairfax site does not host a centralized WLC or local server segment, relying instead on the management VLAN for AP connectivity and client bridging.  Creating this VLAN is necessary for the switch to correctly identify and process traffic coming from AP2; without this, the switch would not understand the VLAN 30 tag and would fail to pass the traffic. I used the “interface range” command for G0/1 and F0/1 to configure them as 802.1Q trunks. Then specifically assigned VLAN 30 as the native VLAN on F0/1 to ensure management traffic to the Access Point remains untagged for easier discovery and communication, while still allowing the port to carry tagged wireless client traffic.
 </p>
 
 <p>
-
-</p>
-<br>
-
-<p>
-- 
-</p>
-
-<p>
-
+<img width="777" height="302" alt="image" src="https://github.com/user-attachments/assets/3cdd946d-39d4-4902-b35f-b081f799d3ce" />
 </p>
 <br>
 
 <p>
-- 
+- Before beginning the wireless configuration, I connected the Lightweight APs to DC power, causing their link lights to activate. Now that both routers are now fully set up, the tunnels are operational, and the APs are powered, this is an updated view of the topology, with added subnet labels and all links functional. While the physical traffic still flows through the ISP, we have created a GRE Tunnel which functions as a direct virtual link between the two sites. This tunnel consists of two virtual interfaces (Tunnel0 on both ends) that operate within their own private subnet: 192.168.1.0/30. By assigning 192.168.1.1 to the Sterling end and 192.168.1.2 to the Fairfax end, we have effectively placed both routers in the same room logically. This "virtual wire" provides a safe, encapsulated path for our internal OSPF routing and WLC management traffic to travel, bypassing the complexities of the public WAN.
+  
+Additionally, the topology now illustrates the CAPWAP Tunnels established between the WLC and the Access Points. CAPWAP (Control and Provisioning of Wireless Access Points) is a dual-purpose protocol that creates two distinct logical channels. The Control Tunnel is used for the WLC to manage AP configurations, push firmware updates, and monitor AP health. The Data Tunnel remains essential for initial authentication and certain management traffic, even though we are using FlexConnect for local data switching. The orange lines in the topology represent these logical overlay connections, illustrating how the two branches and their wireless infrastructure are now a single unified network despite the geographic distance.
 </p>
 
 <p>
+<img width="778" height="337" alt="image" src="https://github.com/user-attachments/assets/8cdd9843-5f2e-4003-beaa-bc46c9e8236c" />
+</p>
+<br>
 
+<p>
+- To begin the wireless configuration, from the Management PC's web browser I use HTTPS to connect to the WLC's GUI at https://172.16.1.10. I use the username of “admin” and a password of “123C!sco” to log in.  This step is critical for accessing the WLC's split-MAC management functions. 
+</p>
+
+<p>
+<img width="776" height="601" alt="image" src="https://github.com/user-attachments/assets/e104cff0-e182-4918-a5bb-b0eb9f0c7e09" />
+</p>
+<p>
+<img width="775" height="509" alt="image" src="https://github.com/user-attachments/assets/e86c2d7d-7d76-497f-ad09-6dacd99f8f73" />
+</p>
+<br>
+
+<p>
+- Once logged in, I am presented with the WLC Monitor Summary dashboard. Here, I can see a comprehensive overview of the system, including the software version, memory usage, fan status, and can see at the top that this particular WLC can support up to 150 Access Points. The graphical representation of the controller ports confirms that port 1 is active (indicated by the green port light), showing it is correctly connected to the Sterling network fabric.
+  
+I also confirmed that the controller is active and connected to the Sterling fabric. In the Management interface settings, I verified the gateway is set to 172.16.1.1. I ensured the VLAN Identifier was set to 0, utilizing the switch's native VLAN 30 mapping. This allows the WLC to reach the Fairfax branch via the GRE tunnel to manage AP2. 
+
+</p>
+
+<p>
+<img width="776" height="504" alt="image" src="https://github.com/user-attachments/assets/50aaa4f1-d89a-4bbb-9177-a0a70b3f5b66" />
+</p>
+<p>
+<img width="777" height="520" alt="image" src="https://github.com/user-attachments/assets/fc371738-9a78-4aa0-bebf-c6d2581252e5" />
 </p>
 <br>
 
